@@ -258,6 +258,44 @@
       margin: 20px 0 10px;
     }
 
+    /* ── Подписка ── */
+    .sub-card {
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+      border: 1px solid;
+    }
+    .sub-card.active {
+      background: linear-gradient(135deg, #1a2e10, #1e3a14);
+      border-color: rgba(0,200,83,0.35);
+    }
+    .sub-card.inactive {
+      background: var(--card);
+      border-color: rgba(255,255,255,0.06);
+    }
+    .sub-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .sub-detail { font-size: 13px; color: var(--muted); }
+
+    /* ── Тарифы ── */
+    .plans-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .plan-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 14px 16px;
+      border: 1px solid rgba(124,77,255,0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .plan-card.featured {
+      border-color: rgba(224,64,251,0.4);
+      background: linear-gradient(135deg, #1e1040, #2a1060);
+    }
+    .plan-name { font-size: 15px; font-weight: 700; }
+    .plan-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .plan-price { font-size: 16px; font-weight: 800; color: var(--gold); white-space: nowrap; }
+    .plan-economy { font-size: 11px; color: #00c853; text-align: right; margin-top: 2px; }
+
     /* ── Skeleton loader ── */
     .skeleton {
       background: linear-gradient(90deg, var(--card) 25%, var(--card2) 50%, var(--card) 75%);
@@ -269,6 +307,80 @@
       0% { background-position: 200% 0; }
       100% { background-position: -200% 0; }
     }
+
+    /* ── Кнопки покупки ── */
+    .buy-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .buy-btn {
+      padding: 15px 10px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+      line-height: 1.3;
+    }
+    .buy-btn:active { transform: scale(0.97); opacity: 0.9; }
+    .buy-btn.tokens {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(124,77,255,0.35);
+    }
+    .buy-btn.subs {
+      background: linear-gradient(135deg, #ffd600, #ff9100);
+      color: #1a0533;
+      box-shadow: 0 4px 16px rgba(255,214,0,0.2);
+    }
+    .collapsible { display: none; margin-bottom: 8px; }
+
+    /* ── История транзакций ── */
+    .history-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 16px;
+    }
+    .history-tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 13px 8px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+    .tab-content { padding: 0 14px; }
+    .tx-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .tx-row:last-child { border-bottom: none; }
+    .tx-desc { font-size: 14px; font-weight: 600; }
+    .tx-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .tx-right { text-align: right; }
+    .tx-amount { font-size: 16px; font-weight: 800; }
+    .tx-amount.pos { color: #00c853; }
+    .tx-amount.neg { color: #ff5252; }
+    .tx-bal { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .tx-empty { text-align: center; color: var(--muted); padding: 28px 0; font-size: 13px; }
   </style>
 </head>
 <body>
@@ -312,19 +424,22 @@
     </div>
   </div>
 
+  <!-- Подписка -->
+  <div class="section-title">Подписка</div>
+  <div class="sub-card" id="sub-card">
+    <div class="sub-title" id="sub-title">Загрузка...</div>
+    <div class="sub-detail" id="sub-detail"></div>
+  </div>
+
   <!-- Детали -->
-  <div class="section-title">Детали аккаунта</div>
+  <div class="section-title">Аккаунт</div>
   <div class="info-card">
-    <div class="info-row">
-      <span class="info-key">💳 Тариф</span>
-      <span class="badge">Free</span>
-    </div>
     <div class="info-row">
       <span class="info-key">⚡ Статус</span>
       <span class="badge green">Активен</span>
     </div>
     <div class="info-row">
-      <span class="info-key">🎬 Качество</span>
+      <span class="info-key">🎬 Стиль</span>
       <span class="info-val">Disney Pixar 3D</span>
     </div>
     <div class="info-row">
@@ -333,7 +448,63 @@
     </div>
   </div>
 
-  <!-- Кнопки -->
+  <!-- Пополнение -->
+  <div class="section-title">Пополнение</div>
+  <div class="buy-grid">
+    <button class="buy-btn tokens" onclick="toggleSection('packs')">💳 Купить<br>токены</button>
+    <button class="buy-btn subs" onclick="toggleSection('subs')">👑 Купить<br>подписку</button>
+  </div>
+
+  <!-- Токены (скрыто) -->
+  <div id="section-packs" class="collapsible plans-grid">
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:4px 0">🛒 Разовые кредиты · стартовые цены</div>
+    <div class="plan-card" onclick="buyPack('pack_1')" style="cursor:pointer">
+      <div><div class="plan-name">🎯 Пробный</div><div class="plan-detail">1 кредит</div></div>
+      <div style="text-align:right"><div class="plan-price">199₽</div><div class="plan-economy">Купить →</div></div>
+    </div>
+    <div class="plan-card" onclick="buyPack('pack_3')" style="cursor:pointer">
+      <div><div class="plan-name">🌟 Мини</div><div class="plan-detail">3 кредита</div></div>
+      <div style="text-align:right"><div class="plan-price">499₽</div><div class="plan-economy">−17%</div></div>
+    </div>
+    <div class="plan-card featured" onclick="buyPack('pack_10')" style="cursor:pointer">
+      <div><div class="plan-name">💫 Стандарт</div><div class="plan-detail">10 кредитов</div></div>
+      <div style="text-align:right"><div class="plan-price">1 490₽</div><div class="plan-economy">−25%</div></div>
+    </div>
+    <div class="plan-card" onclick="buyPack('pack_25')" style="cursor:pointer">
+      <div><div class="plan-name">⭐ Максимум</div><div class="plan-detail">25 кредитов</div></div>
+      <div style="text-align:right"><div class="plan-price">3 490₽</div><div class="plan-economy">−30%</div></div>
+    </div>
+  </div>
+
+  <!-- Подписки (скрыто) -->
+  <div id="section-subs" class="collapsible plans-grid">
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;padding:4px 0">💎 Подписки на 30 дней</div>
+    <div class="plan-card" onclick="buyPack('sub_base')" style="cursor:pointer">
+      <div><div class="plan-name">🔮 Базовая</div><div class="plan-detail">15 кредитов/мес</div></div>
+      <div style="text-align:right"><div class="plan-price">1 990₽</div><div class="plan-economy">−33%</div></div>
+    </div>
+    <div class="plan-card featured" onclick="buyPack('sub_pro')" style="cursor:pointer">
+      <div><div class="plan-name">💎 Про</div><div class="plan-detail">40 кредитов/мес</div></div>
+      <div style="text-align:right"><div class="plan-price">4 990₽</div><div class="plan-economy">−37%</div></div>
+    </div>
+    <div class="plan-card" onclick="buyPack('sub_vip')" style="cursor:pointer">
+      <div><div class="plan-name">👑 VIP</div><div class="plan-detail">100 кредитов/мес</div></div>
+      <div style="text-align:right"><div class="plan-price">10 990₽</div><div class="plan-economy">−45%</div></div>
+    </div>
+  </div>
+
+  <!-- Движение средств -->
+  <div class="section-title">Движение средств</div>
+  <div class="history-card">
+    <div class="history-tabs">
+      <button class="tab-btn active" id="tab-btn-payments" onclick="switchTab('payments')">История платежей</button>
+      <button class="tab-btn" id="tab-btn-tokens" onclick="switchTab('tokens')">История токенов</button>
+    </div>
+    <div id="tab-payments" class="tab-content"></div>
+    <div id="tab-tokens" class="tab-content" style="display:none"></div>
+  </div>
+
+  <!-- Действия -->
   <div class="section-title">Действия</div>
   <button class="btn btn-primary" onclick="closeAndCreate()">🎬 Создать мультфильм</button>
   <button class="btn btn-outline" onclick="closeApp()">← Закрыть</button>
@@ -395,9 +566,71 @@
   // Персонаж
   document.getElementById('char-status').textContent = appData.has_char ? '✅' : '❌';
 
-  // Кнопки
+  // Подписка
+  const subCard   = document.getElementById('sub-card');
+  const subTitle  = document.getElementById('sub-title');
+  const subDetail = document.getElementById('sub-detail');
+  if (appData.sub_active) {
+    subCard.classList.add('active');
+    subTitle.textContent = (appData.sub_label || 'Подписка') + ' — активна';
+    subDetail.textContent = 'Действует до: ' + (appData.sub_expires || '');
+  } else {
+    subCard.classList.add('inactive');
+    subTitle.textContent = 'Подписка не активна';
+    subDetail.textContent = 'Нажмите «Купить подписку» для экономии до 45%';
+  }
+
+  // ── История транзакций ──
+  const history  = appData.history || [];
+  const payments = history.filter(h => h.t === 'purchase');
+  const tokens   = history.filter(h => h.t === 'spend');
+
+  function renderHistory(items, containerId) {
+    const el = document.getElementById(containerId);
+    if (!items.length) {
+      el.innerHTML = '<div class="tx-empty">Пока нет записей</div>';
+      return;
+    }
+    el.innerHTML = items.map(tx => `
+      <div class="tx-row">
+        <div class="tx-left">
+          <div class="tx-desc">${tx.d}</div>
+          <div class="tx-date">${tx.dt}</div>
+        </div>
+        <div class="tx-right">
+          <div class="tx-amount ${tx.c > 0 ? 'pos' : 'neg'}">${tx.c > 0 ? '+' : ''}${tx.c} кред.</div>
+          <div class="tx-bal">баланс: ${tx.b}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  renderHistory(payments, 'tab-payments');
+  renderHistory(tokens,   'tab-tokens');
+
+  // ── Переключение табов ──
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+    document.getElementById('tab-btn-' + tab).classList.add('active');
+    document.getElementById('tab-' + tab).style.display = 'block';
+  }
+
+  // ── Раскрыть/скрыть секцию покупки ──
+  function toggleSection(id) {
+    const el    = document.getElementById('section-' + id);
+    const other = document.getElementById('section-' + (id === 'packs' ? 'subs' : 'packs'));
+    const isOpen = el.style.display === 'flex' || el.style.display === 'block';
+    other.style.display = 'none';
+    el.style.display = isOpen ? 'none' : 'flex';
+  }
+
+  // ── Кнопки ──
   function closeAndCreate() {
     tg.sendData(JSON.stringify({ action: 'create' }));
+  }
+  function buyPack(key) {
+    tg.sendData(JSON.stringify({ action: 'buy', key: key }));
   }
   function closeApp() {
     tg.close();
