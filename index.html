@@ -529,10 +529,15 @@
 
   // Данные из URL параметра ?d=BASE64
   let appData = {};
+  const raw = new URLSearchParams(window.location.search).get('d');
   try {
-    const raw = new URLSearchParams(window.location.search).get('d');
     if (raw) appData = JSON.parse(atob(raw));
   } catch (e) {}
+
+  // Если данных нет — просим бота прислать профиль с данными
+  if (!raw) {
+    tg.sendData(JSON.stringify({ action: 'get_profile' }));
+  }
 
   // Имя
   const name = tgUser.first_name
