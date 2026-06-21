@@ -385,6 +385,14 @@
 </head>
 <body>
 
+<!-- Экран когда нет данных -->
+<div id="no-data-overlay" style="display:none; position:fixed; inset:0; background:#1a0533; z-index:1000; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px;">
+  <div style="font-size:56px; margin-bottom:20px;">👤</div>
+  <div style="font-size:22px; font-weight:800; margin-bottom:12px; color:#fff;">Нужно открыть через бота</div>
+  <div style="font-size:14px; color:rgba(255,255,255,0.6); margin-bottom:36px; line-height:1.6;">Нажмите кнопку<br><b style="color:#fff">👤 Мой профиль</b><br>в чате с ботом</div>
+  <button onclick="tg.close()" style="background:linear-gradient(135deg,#7c4dff,#e040fb);color:#fff;border:none;padding:16px 40px;border-radius:16px;font-size:16px;font-weight:700;cursor:pointer;">← Вернуться в бот</button>
+</div>
+
 <div class="header">
   <div class="logo">✦ CartoonAI</div>
   <div class="avatar-wrap">
@@ -534,9 +542,9 @@
     if (raw) appData = JSON.parse(atob(raw));
   } catch (e) {}
 
-  // Если данных нет — просим бота прислать профиль с данными
+  // Если данных нет — показываем экран-подсказку
   if (!raw) {
-    tg.sendData(JSON.stringify({ action: 'get_profile' }));
+    document.getElementById('no-data-overlay').style.display = 'flex';
   }
 
   // Имя
