@@ -640,7 +640,7 @@
 
   // ── Кнопки ──
   function closeAndCreate() {
-    tg.sendData(JSON.stringify({ action: 'create' }));
+    tg.openTelegramLink('https://t.me/cartoooonAI_bot?start=create');
   }
   function buyPack(key) {
     tg.sendData(JSON.stringify({ action: 'buy', key: key }));
